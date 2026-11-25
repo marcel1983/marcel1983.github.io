@@ -46,6 +46,14 @@ p{margin:.6em 0}
 nav{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule)}
 nav .wrap{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:center;padding:12px max(5vw,16px)}
 nav b{font:600 20px "Barlow Semi Condensed",sans-serif;margin-right:auto}
+.lang{display:inline-flex;border:1.5px solid var(--line);border-radius:6px;overflow:hidden;flex:none}
+.lang a{display:inline-flex;align-items:center;min-height:34px;padding:0 11px;font:600 14px/1 Barlow,sans-serif;color:var(--line);text-decoration:none}
+.lang a+a{border-left:1.5px solid var(--line)}
+.lang a[aria-current]{background:var(--line);color:var(--bg)}
+.lang a:not([aria-current]):hover{background:color-mix(in srgb,var(--line) 12%,transparent);color:var(--line)}
+nav .brand{display:flex;align-items:center;gap:14px;margin-right:auto}
+nav .brand b{margin:0}
+
 nav a{text-decoration:none;color:var(--ink);font-weight:500;padding:6px 0}
 nav a:hover{color:var(--line)}
 .hero{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:24px 48px;align-items:end;padding-bottom:20px}
@@ -116,7 +124,7 @@ footer a{color:var(--ink)}
 </style>
 </head>
 <body>
-<nav><div class="wrap"><b>Open structural engineering</b><a href="#programs">Programs</a><a href="#guide">Download and install</a><a href="#get-involved">Get involved</a><a href="https://github.com/marcel1983">GitHub</a><a href="../" hreflang="es" lang="es">Español</a></div></nav>
+<nav><div class="wrap"><div class="brand"><span class="lang" role="group" aria-label="Language / Idioma"><a href="../" lang="es" hreflang="es" title="Español">ES</a><a href="./" aria-current="page" lang="en" title="English">EN</a></span><b>Open structural engineering</b></div><a href="#programs">Programs</a><a href="#guide">Download and install</a><a href="#get-involved">Get involved</a><a href="https://github.com/marcel1983">GitHub</a></div></nav>
 
 <header class="band">
 <div class="wrap">
@@ -375,6 +383,15 @@ s+=T(SX+16,SY+222,'✓ OK','font-size="18" fill="var(--acc)"').replace('fill="va
 s+=`</g>`;
 s+=callout(SX+150,SY+2,4);
 g.innerHTML=s;
+}
+</script>
+<script>
+{
+const map={programas:'programs',guia:'guide',participar:'get-involved'};
+const back=Object.fromEntries(Object.entries(map).map(([a,b])=>[b,a]));
+for(const a of document.querySelectorAll('.lang a:not([aria-current])')){
+a.addEventListener('click',e=>{const h=location.hash.slice(1);if(!h)return;const t=map[h]||back[h]||h;e.preventDefault();location.href=a.getAttribute('href')+'#'+t;});
+}
 }
 </script>
 </body>
