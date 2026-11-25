@@ -389,9 +389,10 @@ g.innerHTML=s;
 {
 const map={programas:'programs',guia:'guide',participar:'get-involved'};
 const back=Object.fromEntries(Object.entries(map).map(([a,b])=>[b,a]));
-for(const a of document.querySelectorAll('.lang a:not([aria-current])')){
-a.addEventListener('click',e=>{const h=location.hash.slice(1);if(!h)return;const t=map[h]||back[h]||h;e.preventDefault();location.href=a.getAttribute('href')+'#'+t;});
-}
+const links=[...document.querySelectorAll('.lang a:not([aria-current])')];
+for(const a of links)a.dataset.base=a.getAttribute('href');
+const sync=()=>{const h=location.hash.slice(1);const t=h?(map[h]||back[h]||h):'';for(const a of links)a.setAttribute('href',a.dataset.base+(t?'#'+t:''));};
+sync();addEventListener('hashchange',sync);
 }
 </script>
 </body>
