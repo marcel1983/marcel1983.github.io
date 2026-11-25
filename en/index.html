@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Open structural engineering</title>
+<meta name="description" content="IngeCalc, OpenConex, OpenFEMConex and OpenSees Studio: free software to calculate, analyse and document structures. How to download them and how to get involved.">
+<link rel="canonical" href="https://marcel1983.github.io/en/">
+<link rel="alternate" hreflang="es" href="https://marcel1983.github.io/">
+<link rel="alternate" hreflang="en" href="https://marcel1983.github.io/en/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:url" content="https://marcel1983.github.io/en/">
+<meta property="og:title" content="Open structural engineering">
+<meta property="og:description" content="Four free programs to calculate, analyse and document structures: IngeCalc, OpenConex, OpenFEMConex and OpenSees Studio. How to download them and how to get involved.">
+<meta property="og:image" content="https://marcel1983.github.io/img/og-en.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* VOICE  everyday-technical: una invitación clara a ingenieros, sin jerga de programadores
+   IDEA   una lámina de planos estructurales: retícula de ejes, cajetín, detalles con llamadas
+   PICTURE un pórtico de acero dibujado como plano, con su deformada, el detalle de la placa base y la hoja de cálculo; cada programa es una llamada del plano
+   COLOUR blanco de lámina, tinta casi negra, líneas cobalto #1d4ed8, minio #e4572e como acento; zonas cobalto pálido
+   TYPE   Barlow Semi Condensed (rotulado técnico) + Barlow
+   LAYOUT título a lo ancho, plano a sangre debajo con su leyenda; luego fichas 2×2, guía en una columna con maquetas, participación; en móvil todo apilado */
+:root{color-scheme:light dark;--bg:light-dark(#ffffff,#0b1120);--ink:light-dark(#0d1321,#e8ecf6);--mut:light-dark(#4a5368,#a3acc2);--line:light-dark(#1d4ed8,#7aa2ff);--zone:light-dark(#eef2ff,#131c33);--rule:light-dark(#d5dcef,#26314d);--acc:light-dark(#d9481f,#ff7a52);--card:light-dark(#ffffff,#0f172a)}
+:root[data-theme=light]{color-scheme:light}
+:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 Barlow,system-ui,sans-serif;overflow-x:clip}
+a{color:var(--line)}
+img{max-width:100%;display:block}
+h1,h2,h3{font-family:"Barlow Semi Condensed",Barlow,sans-serif;line-height:1.05;letter-spacing:-.01em;text-wrap:balance;margin:0}
+h1{font-size:clamp(34px,5vw,54px);font-weight:700}
+h2{font-size:clamp(30px,3.6vw,42px);font-weight:700}
+h3{font-size:24px;font-weight:600}
+p{margin:.6em 0}
+.wrap{max-width:1240px;margin:0 auto}
+.band{padding:clamp(28px,4vw,64px) max(5vw,16px)}
+.zone{background:var(--zone)}
+nav{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule)}
+nav .wrap{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:center;padding:12px max(5vw,16px)}
+nav b{font:600 20px "Barlow Semi Condensed",sans-serif;margin-right:auto}
+nav a{text-decoration:none;color:var(--ink);font-weight:500;padding:6px 0}
+nav a:hover{color:var(--line)}
+.hero{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:24px 48px;align-items:end;padding-bottom:20px}
+.lead{font-size:19px;color:var(--mut);max-width:58ch;margin:0}
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
+.btn{display:inline-flex;align-items:center;min-height:44px;padding:0 18px;border-radius:6px;border:1.5px solid var(--line);color:var(--line);text-decoration:none;font-weight:600}
+.btn.solid{background:var(--line);color:var(--bg)}
+.btn:hover{background:color-mix(in srgb,var(--line) 12%,transparent)}
+.btn.solid:hover{background:color-mix(in srgb,var(--line) 85%,var(--ink))}
+.btn:focus-visible,a:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.sheet{border:1.5px solid var(--line);border-radius:4px;background:var(--card);position:relative}
+.fig{position:relative;aspect-ratio:1200/470;width:100%}
+.fig svg{position:absolute;inset:0;width:100%;height:100%}
+.legend{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1.5px solid var(--line)}
+.legend a{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;padding:14px 16px;text-decoration:none;color:var(--ink);border-left:1px solid var(--rule)}
+.legend a:first-child{border-left:0}
+.legend a:hover{background:var(--zone)}
+.legend i{grid-row:span 2;width:30px;height:30px;border-radius:50%;border:2px solid var(--acc);color:var(--acc);font:700 16px/26px "Barlow Semi Condensed",sans-serif;text-align:center;font-style:normal}
+.legend strong{font:600 19px "Barlow Semi Condensed",sans-serif}
+.legend span{color:var(--mut);font-size:15px;line-height:1.35}
+.sec-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:12px 48px;align-items:end;margin-bottom:28px}
+.sec-head p{color:var(--mut);margin:0}
+.apps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+.app{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--rule);border-radius:6px;overflow:hidden}
+.shot{aspect-ratio:16/9;background:#0b1529;overflow:hidden;border-bottom:1px solid var(--rule)}
+.shot img{width:100%;height:100%;object-fit:cover;object-position:top left}
+.shot.fit img{object-fit:contain;object-position:center}
+.app .body{padding:20px 22px 22px;display:flex;flex-direction:column;gap:10px;flex:1}
+.app .top{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline}
+.tag{font-size:14px;color:var(--mut);white-space:nowrap}
+.tag b{color:var(--acc);font-weight:600}
+.app ul{margin:0;padding-left:20px}
+.app li{margin:3px 0}
+.meta{font-size:15px;color:var(--mut);border-top:1px solid var(--rule);padding-top:10px;margin-top:auto}
+.app .btns .btn{min-height:40px;padding:0 14px;font-size:15px}
+.steps{list-style:none;margin:0;padding:0;counter-reset:s}
+.step{display:grid;grid-template-columns:56px minmax(0,1fr) minmax(0,.9fr);gap:12px 28px;padding:28px 0;border-top:1px solid var(--rule)}
+.step:first-child{border-top:0}
+.step>.n{counter-increment:s;width:44px;height:44px;border-radius:50%;border:2px solid var(--acc);color:var(--acc);display:grid;place-items:center;font:700 20px "Barlow Semi Condensed",sans-serif}
+.step>.n::before{content:counter(s)}
+.step h3{margin-bottom:6px}
+.step ul{margin:.4em 0;padding-left:20px}
+.mock{border:1px solid var(--rule);border-radius:6px;background:var(--card);font-size:15px;overflow:hidden;align-self:start}
+.mock .bar{background:var(--zone);padding:8px 12px;border-bottom:1px solid var(--rule);font-weight:600;display:flex;justify-content:space-between;gap:8px}
+.mock .row{display:flex;justify-content:space-between;gap:12px;padding:9px 12px;border-top:1px solid var(--rule);align-items:center}
+.mock .row:first-of-type{border-top:0}
+.mock code{font-size:14px;overflow-wrap:anywhere}
+.mock .hl{background:color-mix(in srgb,var(--acc) 12%,transparent)}
+.mock .pill{font-size:13px;border:1px solid var(--line);color:var(--line);border-radius:4px;padding:2px 8px;white-space:nowrap}
+.mock .sub{font-size:13px;color:var(--mut)}
+code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.9em;background:var(--zone);padding:1px 5px;border-radius:3px}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-weight:600;background:var(--zone)}
+td:first-child{font-weight:600;white-space:nowrap}
+.cols{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px}
+.who h3{font-size:21px;margin-bottom:6px}
+.who p{margin:0;color:var(--mut);font-size:16px}
+.note{border-left:3px solid var(--acc);padding:4px 0 4px 16px;color:var(--mut);font-size:16px}
+footer{border-top:1.5px solid var(--line)}
+footer .wrap{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:24px 48px;font-size:15px;color:var(--mut)}
+footer a{color:var(--ink)}
+@media(max-width:900px){.hero,.sec-head,footer .wrap{grid-template-columns:minmax(0,1fr)}.legend{grid-template-columns:repeat(2,minmax(0,1fr))}.legend a:nth-child(3){border-left:0}.legend a:nth-child(n+3){border-top:1px solid var(--rule)}.step{grid-template-columns:48px minmax(0,1fr)}.step .mock{grid-column:2}.cols{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.apps{grid-template-columns:minmax(0,1fr)}.legend{grid-template-columns:minmax(0,1fr)}.legend a{border-left:0;border-top:1px solid var(--rule)}.legend a:first-child{border-top:0}.step{grid-template-columns:minmax(0,1fr)}.step .mock{grid-column:auto}.cols{grid-template-columns:minmax(0,1fr)}.fig{aspect-ratio:1200/560}table{font-size:13px}.stack thead{display:none}.stack tr{display:grid;padding-block:10px;border-bottom:1px solid var(--rule)}.stack td{display:flex;justify-content:space-between;gap:12px;border:0;padding:3px 0;white-space:normal}.stack td::before{content:attr(data-l);font-weight:600;color:var(--mut)}}
+@media(prefers-reduced-motion:no-preference){.defl{animation:sway 3.2s ease-in-out infinite alternate}}
+@keyframes sway{from{opacity:.25}to{opacity:1}}
+</style>
+</head>
+<body>
+<nav><div class="wrap"><b>Open structural engineering</b><a href="#programs">Programs</a><a href="#guide">Download and install</a><a href="#get-involved">Get involved</a><a href="https://github.com/marcel1983">GitHub</a><a href="../" hreflang="es" lang="es">Español</a></div></nav>
+
+<header class="band">
+<div class="wrap">
+<div class="hero">
+<div>
+<h1>Four free programs to calculate, analyse and document structures</h1>
+</div>
+<div>
+<p class="lead">Made by engineers, free of charge and open source. Download them, use them on your projects and help us improve them: by reporting problems, contributing worked examples or writing code.</p>
+<div class="btns" style="margin-top:16px"><a class="btn solid" href="#programs">See the programs</a><a class="btn" href="#get-involved">How to get involved</a></div>
+</div>
+</div>
+
+<div class="sheet" style="margin-top:28px">
+<div class="fig">
+<svg id="plano" viewBox="0 0 1200 470" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Drawing of a steel portal frame with its deflected shape, the base plate detail and a calculation sheet, marked with callouts 1 to 4">
+<defs>
+<pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="8" stroke="var(--line)" stroke-width="1" opacity=".45"/></pattern>
+<pattern id="mesh" width="14" height="14" patternUnits="userSpaceOnUse"><path d="M0 0H14V14M0 0L14 14" fill="none" stroke="var(--acc)" stroke-width=".8"/></pattern>
+<linearGradient id="stress" x1="0" x2="1"><stop offset="0" stop-color="var(--acc)" stop-opacity=".05"/><stop offset=".5" stop-color="var(--acc)" stop-opacity=".55"/><stop offset="1" stop-color="var(--acc)" stop-opacity=".1"/></linearGradient>
+<marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--line)"/></marker>
+</defs>
+<g fill="none" stroke="var(--line)" stroke-width="2" stroke-linejoin="round" id="dibujo"></g>
+</svg>
+</div>
+<div class="legend">
+<a href="#opensees-studio"><i>1</i><strong>OpenSees Studio</strong><span>Model and analyse the frame: modal, pushover, time history</span></a>
+<a href="#openconex"><i>2</i><strong>OpenConex</strong><span>Design the connection with the AISC manual methods</span></a>
+<a href="#openfemconex"><i>3</i><strong>OpenFEMConex</strong><span>Check the base plate with finite elements</span></a>
+<a href="#ingecalc"><i>4</i><strong>IngeCalc</strong><span>Write the calculation report, with units</span></a>
+</div>
+</div>
+</div>
+</header>
+
+<section class="band zone" id="programs">
+<div class="wrap">
+<div class="sec-head"><h2>The programs</h2><p>All of them run on Windows, Linux and macOS, with nothing else to install. They are support tools: responsibility for the design lies with the engineer who signs it.</p></div>
+<div class="apps" id="apps"></div>
+</div>
+</section>
+
+<section class="band" id="guide">
+<div class="wrap">
+<div class="sec-head"><h2>How to download, install and report</h2><p>You don't need to know how to program or how GitHub works. GitHub is the site that holds the programs' code, their downloadable releases and the list of reports.</p></div>
+<ol class="steps">
+
+<li class="step"><span class="n"></span>
+<div><h3>Download the latest release</h3>
+<p>On the program's page, open <b>Releases</b> (or use the <b>Download</b> button on each card, which goes straight to the latest release). Scroll down to <b>Assets</b> and pick the file for your system:</p>
+<div class="scroll"><table class="stack"><thead><tr><th>Program</th><th>Windows</th><th>Linux</th><th>macOS</th></tr></thead><tbody id="dl"></tbody></table></div>
+<p class="sub" style="font-size:14px;color:var(--mut)">Skip the <code>Source code</code> files: they hold the source, not the program.</p>
+</div>
+<div class="mock" aria-hidden="true">
+<div class="bar"><span>OpenFEMConex v0.3.0</span><span class="pill">Latest</span></div>
+<div class="row"><span class="sub">▾ Assets</span><span class="sub">5</span></div>
+<div class="row"><code>openfemconex-linux-x86_64.tar.gz</code></div>
+<div class="row"><code>openfemconex-macos-arm64.zip</code></div>
+<div class="row hl"><code>openfemconex-windows-x64.zip</code><span class="sub">← Windows</span></div>
+<div class="row"><code class="sub">Source code (zip)</code></div>
+<div class="row"><code class="sub">Source code (tar.gz)</code></div>
+</div>
+</li>
+
+<li class="step"><span class="n"></span>
+<div><h3>Open it the first time</h3>
+<p>The programs are not code-signed yet, so your system asks for confirmation once:</p>
+<ul>
+<li><b>Windows:</b> if "Windows protected your PC" appears, click <b>More info</b> and then <b>Run anyway</b>. If you downloaded a <code>.zip</code>, unzip the whole folder before opening the <code>.exe</code>.</li>
+<li><b>macOS:</b> right-click the app and choose <b>Open</b>. On macOS 15 or later: try to open it once, then go to System Settings › Privacy &amp; Security › <b>Open Anyway</b>.</li>
+<li><b>Linux:</b> make the <code>.AppImage</code> executable (<code>chmod +x</code>) and run it.</li>
+</ul>
+<p><b>OpenSees Studio</b> also asks you to install the OpenSees solver the first time, from <b>Options › Solver</b>; the program downloads it after you accept its license.</p>
+</div>
+<div class="mock" aria-hidden="true">
+<div class="bar"><span>Windows protected your PC</span></div>
+<div class="row"><span class="sub">Microsoft Defender SmartScreen prevented an unrecognized app from starting.</span></div>
+<div class="row hl"><span style="color:var(--line);text-decoration:underline">More info</span><span class="sub">← 1</span></div>
+<div class="row"><span class="pill">Run anyway</span><span class="sub">← 2</span></div>
+</div>
+</li>
+
+<li class="step"><span class="n"></span>
+<div><h3>Create a free GitHub account</h3>
+<p>You only need it to report or comment, not to download. Sign up at <a href="https://github.com/signup">github.com/signup</a> with your email. Once you have an account, click <b>Star</b> on the programs you use (it helps others find them) and, under <b>Watch › Custom › Releases</b>, turn on notifications for new releases.</p>
+</div>
+<div class="mock" aria-hidden="true">
+<div class="bar"><span>marcel1983 / openconex</span></div>
+<div class="row"><span class="pill">Watch ▾</span><span class="pill">Star</span></div>
+<div class="row hl"><span>Custom › <b>Releases</b></span><span class="sub">release notifications</span></div>
+</div>
+</li>
+
+<li class="step"><span class="n"></span>
+<div><h3>Report a problem or propose an improvement</h3>
+<p>Open the program's <b>Issues</b> tab and click <b>New issue</b> (or use the <b>Report or propose</b> button on each card). Pick the template that fits and fill in the form; each field says what to write.</p>
+<ul>
+<li>Give the <b>version</b> (it is in the name of the file you downloaded, or in Help › About).</li>
+<li><b>Drag</b> screenshots and the model file into the form. If GitHub refuses the extension (<code>.ocnx</code>, <code>.osmodel</code>, <code>.smj</code>), zip it first.</li>
+<li>Before sending, check whether someone already reported the same thing; if so, comment there.</li>
+</ul>
+<p>You can write in English or Spanish.</p>
+</div>
+<div class="mock" aria-hidden="true">
+<div class="bar"><span>New issue · choose a template</span></div>
+<div class="row hl"><span><b>Validation case</b><br><span class="sub">An example with a known answer</span></span></div>
+<div class="row"><span><b>Calculation error</b><br><span class="sub">A number or a check is wrong</span></span></div>
+<div class="row"><span><b>Bug report</b><br><span class="sub">It crashes or doesn't do what it should</span></span></div>
+<div class="row"><span><b>Feature request</b><br><span class="sub">A new feature or an improvement</span></span></div>
+</div>
+</li>
+
+<li class="step"><span class="n"></span>
+<div><h3>Ask in Discussions</h3>
+<p>How-to questions ("how do I model…?", "which code applies…?") and ideas that are not yet shaped go to each program's <b>Discussions</b> tab, not to Issues. News and new releases are announced there too.</p>
+</div>
+<div></div>
+</li>
+
+<li class="step"><span class="n"></span>
+<div><h3>If you program: contribute code</h3>
+<p><b>Fork</b> the repository, create a branch, make your change with its tests and open a <b>pull request</b> against <code>main</code>. Each project's <code>CONTRIBUTING.md</code> explains how to set up the environment and what to check before sending. Issues labelled <b>good first issue</b> are a good place to start.</p>
+</div>
+<div class="mock" aria-hidden="true">
+<div class="bar"><span>Languages</span></div>
+<div class="row"><span>IngeCalc</span><span class="sub">Rust · TypeScript · Tauri</span></div>
+<div class="row"><span>OpenConex</span><span class="sub">Python · Qt</span></div>
+<div class="row"><span>OpenFEMConex</span><span class="sub">Python · Qt · CalculiX · Gmsh</span></div>
+<div class="row"><span>OpenSees Studio</span><span class="sub">Python · Qt · PyVista · OpenSeesPy</span></div>
+</div>
+</li>
+</ol>
+</div>
+</section>
+
+<section class="band zone" id="get-involved">
+<div class="wrap">
+<div class="sec-head"><h2>How to get involved, by what you do best</h2><p>What these programs need most is not code: it is engineers who use them on real work and tell us where they fail or what is missing.</p></div>
+<div class="cols">
+<div class="who"><h3>Practising engineers</h3><p>Contribute <b>validation cases</b>: an example from a design guide or a textbook, your hand calculation or another program. Each case becomes an automated test that runs on every change.</p></div>
+<div class="who"><h3>Teachers and students</h3><p>Use the programs in class, write tutorials and examples, or take a new feature or a validation as a thesis topic. The bundled examples are written to read as study material.</p></div>
+<div class="who"><h3>Programmers</h3><p>Python and Qt in OpenConex, OpenFEMConex and OpenSees Studio; Rust and TypeScript in IngeCalc. Start with a <b>good first issue</b>.</p></div>
+<div class="who"><h3>Translators and designers</h3><p>Translate the interface and the manuals, improve icons and screens, or check that the help reads clearly.</p></div>
+</div>
+<p class="note" style="margin-top:32px">When you contribute an example, cite the source and share only the numbers: do not copy text, tables or figures from copyrighted codes or books.</p>
+</div>
+</section>
+
+<footer class="band">
+<div class="wrap">
+<div><p><b style="color:var(--ink)">Open structural engineering</b>: IngeCalc, OpenConex, OpenFEMConex and OpenSees Studio are free software under the GPL-3.0 and AGPL-3.0 licenses. The reports, drawings and models you make with them are yours.</p>
+<p>Support tools. Responsibility for the design lies with the engineer who signs it, who must check the results.</p></div>
+<div><p>Code and downloads at <a href="https://github.com/marcel1983">github.com/marcel1983</a>.</p><p>OpenSees Studio is developed together with the main repository <a href="https://github.com/ogunc/opensees-studio">ogunc/opensees-studio</a>.</p><p><a href="../" hreflang="es" lang="es">Versión en español</a></p></div>
+</div>
+</footer>
+
+<script>
+{
+const GH='https://github.com/marcel1983/';
+const apps=[
+{id:'opensees-studio',name:'OpenSees Studio',status:'Pre-alpha',lic:'AGPL-3.0',img:'../img/opensees-studio.webp',alt:'OpenSees Studio window with a three-storey building and its loads',
+ what:'A graphical interface for OpenSees, the structural and earthquake engineering solver, with no Tcl or Python to write.',
+ pts:['Draw frames, assign materials, sections and loads','Static, modal, response spectrum, pushover and time-history analyses','Deformed shapes, force diagrams and hysteresis; wizards for warehouses and buildings'],
+ os:'Windows, Linux and macOS (Apple Silicon)',tech:'Python, Qt, PyVista, OpenSeesPy',
+ extra:'This repository is the development lane; features are then merged into the main repository, <a href="https://github.com/ogunc/opensees-studio">ogunc/opensees-studio</a>.'},
+{id:'openconex',name:'OpenConex',status:'Alpha',lic:'GPL-3.0',img:'../img/openconex.webp',alt:'Illustration of a steel connection node',fit:true,
+ what:'Steel connection design to AISC, with calculation report, DXF drawings and 3D model.',
+ pts:['Base plates (Design Guide 1, AISC 360-22, ACI 318-19)','Shear and moment beam-to-column and beam-to-beam connections, bolted splices','Imports forces from SAP2000, ETABS, Excel and CSV; batch runs'],
+ os:'Windows, Linux and macOS (Apple Silicon)',tech:'Python, Qt'},
+{id:'openfemconex',name:'OpenFEMConex',status:'In development',lic:'AGPL-3.0',img:'../img/openfemconex.webp',alt:'OpenFEMConex showing the checks of a base plate',
+ what:'Column base plates with anchor rods designed with finite elements (CalculiX), checked to AISC 360, Design Guide 1 and ACI 318 Chapter 17.',
+ pts:['Column, plate and stiffeners as elastic-plastic solids; concrete with contact','Every check with its formula, values and clause','Reproduces the Design Guide 1 examples in its automated tests'],
+ os:'Windows, Linux and macOS (Apple Silicon)',tech:'Python, Qt, CalculiX, Gmsh',
+ extra:'Uses the same <code>.ocnx</code> file as OpenConex: it lets you compare the design guide method with the finite element model.'},
+{id:'ingecalc',name:'IngeCalc',status:'In development',lic:'GPL-3.0',img:'../img/ingecalc.webp',alt:'IngeCalc worksheet with formulas and units',
+ what:'Documented engineering worksheets in the spirit of Mathcad or SMath: formulas written as on paper, with units.',
+ pts:['Numeric and symbolic calculation, SI and US units, matrices','2D and 3D plots inside the document','Exports to PDF, Word/ODT, Excel and LaTeX; interface in six languages'],
+ os:'Windows, Linux and macOS (Intel and Apple Silicon)',tech:'Rust, TypeScript, Tauri'}
+];
+document.getElementById('apps').innerHTML=apps.map(a=>`
+<article class="app" id="${a.id}">
+<div class="shot${a.fit?' fit':''}"><img src="${a.img}" alt="${a.alt}" loading="lazy"></div>
+<div class="body">
+<div class="top"><h3>${a.name}</h3><span class="tag"><b>${a.status}</b> · ${a.lic}</span></div>
+<p style="margin:0">${a.what}</p>
+<ul>${a.pts.map(p=>`<li>${p}</li>`).join('')}</ul>
+${a.extra?`<p style="margin:0;font-size:15px;color:var(--mut)">${a.extra}</p>`:''}
+<div class="meta">For ${a.os}. Built with ${a.tech}.</div>
+<div class="btns"><a class="btn solid" href="${GH}${a.id}/releases/latest">Download</a><a class="btn" href="${GH}${a.id}/issues/new/choose">Report or propose</a><a class="btn" href="${GH}${a.id}">Code</a></div>
+</div>
+</article>`).join('');
+
+const dl=[
+['IngeCalc','<code>…windows_x64-setup.exe</code>','<code>.AppImage</code> or <code>.deb</code>','<code>…aarch64.dmg</code> (M1 or later) or <code>…x64.dmg</code> (Intel)'],
+['OpenConex','<code>.msi</code> (installer) or <code>…windows-x64.zip</code>','<code>.AppImage</code> or <code>…linux-x86_64.zip</code>','<code>…macos-arm64.dmg</code>'],
+['OpenFEMConex','<code>…windows-x64.zip</code>','<code>…linux-x86_64.tar.gz</code>','<code>…macos-arm64.zip</code>'],
+['OpenSees Studio','<code>…windows.zip</code>','<code>.AppImage</code> or <code>…linux.zip</code>','<code>…macos.zip</code>, when the release includes it']
+];
+document.getElementById('dl').innerHTML=dl.map(r=>`<tr>${r.map((c,i)=>`<td data-l="${['Program','Windows','Linux','macOS'][i]}">${c}</td>`).join('')}</tr>`).join('');
+
+/* drawing: portal frame, deflected shape, base plate detail, calculation sheet */
+const g=document.getElementById('dibujo');
+const L=(d,extra='')=>`<path d="${d}" ${extra}/>`;
+const T=(x,y,t,o='')=>`<text x="${x}" y="${y}" fill="var(--line)" stroke="none" font-family="Barlow Semi Condensed, sans-serif" font-size="18" ${o}>${t}</text>`;
+const callout=(x,y,n)=>`<g><circle cx="${x}" cy="${y}" r="17" fill="var(--bg)" stroke="var(--acc)" stroke-width="2.5"/><text x="${x}" y="${y+6}" text-anchor="middle" fill="var(--acc)" stroke="none" font-family="Barlow Semi Condensed, sans-serif" font-weight="700" font-size="19">${n}</text></g>`;
+let s='';
+const G=372;
+// ejes
+for(const [x,l] of [[130,'A'],[570,'B']]){s+=L(`M${x} 30V${G+40}`,'stroke-width="1" stroke-dasharray="14 4 3 4" opacity=".55"');s+=`<circle cx="${x}" cy="22" r="14" stroke-width="1.5"/>`+T(x,28,l,'text-anchor="middle"');}
+// terreno y pedestales
+s+=L(`M40 ${G}H660`,'stroke-width="1.5"');
+for(const x of [130,570]){s+=`<rect x="${x-34}" y="${G}" width="68" height="44" fill="url(#hatch)" stroke-width="1.5"/>`;s+=`<rect x="${x-24}" y="${G-6}" width="48" height="6" fill="var(--line)" stroke="none"/>`;}
+// columnas W (alma y alas)
+for(const x of [130,570]){s+=L(`M${x-9} ${G-6}V182M${x+9} ${G-6}V182`,'stroke-width="2.5"');s+=L(`M${x} ${G-6}V182`,'stroke-width="1" opacity=".6"');}
+// dinteles a dos aguas
+s+=L(`M121 182L350 112L579 182`,'stroke-width="2.5"');s+=L(`M139 196L350 131L561 196`,'stroke-width="2.5"');
+s+=L(`M350 112V131`,'stroke-width="2"');
+// arriostres de cartela
+s+=L(`M139 214L170 186M561 214L530 186`,'stroke-width="1.5"');
+// deformada (modo 1)
+s+=L(`M130 ${G-6}C134 300 150 240 166 182L386 114L606 182C590 240 574 300 570 ${G-6}`,'class="defl" stroke="var(--acc)" stroke-width="2.5" stroke-dasharray="8 6"');
+s+=L(`M610 132H660`,'stroke="var(--acc)" stroke-width="2" marker-end="url(#ar)"');
+s+=T(616,124,'δ','fill="var(--acc)"').replace('fill="var(--line)" ','');
+s+=callout(350,74,1);
+// llamada de detalle sobre la base A
+s+=`<circle cx="130" cy="${G}" r="46" stroke="var(--acc)" stroke-width="1.8" stroke-dasharray="5 4"/>`;
+s+=L(`M174 ${G-14}C260 ${G-40} 600 ${G-30} 700 ${G-40}`,'stroke="var(--acc)" stroke-width="1.5"');
+// detalle de placa base (escala mayor)
+const X0=700,X1=980,PY=300;
+s+=T(X0,48,'DETAIL A · base plate','font-size="20" font-weight="600"');
+s+=L(`M${(X0+X1)/2-34} 70V${PY}M${(X0+X1)/2+34} 70V${PY}`,'stroke-width="3"');
+s+=L(`M${(X0+X1)/2} 70V${PY}`,'stroke-width="1.2" opacity=".6"');
+s+=L(`M${(X0+X1)/2-34} 70H${(X0+X1)/2+34}`,'stroke-width="1" stroke-dasharray="6 4" opacity=".6"');
+// rigidizadores
+s+=L(`M${(X0+X1)/2-34} 230L${X0+40} ${PY}M${(X0+X1)/2+34} 230L${X1-40} ${PY}`,'stroke-width="2"');
+// placa con malla FEM y gradiente de esfuerzos
+s+=`<rect x="${X0}" y="${PY}" width="${X1-X0}" height="20" fill="url(#stress)" stroke-width="2.5"/>`;
+s+=`<rect x="${(X0+X1)/2}" y="${PY}" width="${(X1-X0)/2}" height="20" fill="url(#mesh)" stroke="none"/>`;
+// pedestal
+s+=`<rect x="${X0-14}" y="${PY+20}" width="${X1-X0+28}" height="${G+50-PY-20}" fill="url(#hatch)" stroke-width="1.5"/>`;
+// anclajes con tuercas
+for(const x of [X0+24,X0+64,X1-64,X1-24]){s+=L(`M${x} ${PY-16}V${G+40}`,'stroke-width="3"');s+=`<rect x="${x-9}" y="${PY-12}" width="18" height="10" fill="var(--bg)" stroke-width="2"/>`;s+=L(`M${x} ${G+40}H${x+(x<(X0+X1)/2?14:-14)}`,'stroke-width="3"');}
+// cota de la placa
+s+=L(`M${X0} ${G+66}H${X1}`,'stroke-width="1.2" marker-start="url(#ar)" marker-end="url(#ar)"');
+s+=L(`M${X0} ${PY+22}V${G+74}M${X1} ${PY+22}V${G+74}`,'stroke-width=".8" opacity=".6"');
+s+=T((X0+X1)/2,G+60,'N','text-anchor="middle" font-style="italic"');
+s+=callout(X0+40,250,2);
+s+=callout(X1-10,250,3);
+// hoja de cálculo
+const SX=1018,SY=70;
+s+=`<g transform="rotate(3 ${SX+80} ${SY+130})"><rect x="${SX}" y="${SY}" width="160" height="236" fill="var(--bg)" stroke-width="2"/>`;
+s+=L(`M${SX+128} ${SY}V${SY+28}H${SX+160}`,'stroke-width="1.5"');
+s+=T(SX+16,SY+36,'φRn ≥ Ru','font-size="20" font-weight="600"');
+for(let i=0;i<7;i++){const y=SY+62+i*22;s+=L(`M${SX+16} ${y}H${SX+(i%3===2?96:144)}`,'stroke-width="1.5" opacity="'+(i%3===2?'.9':'.45')+'"');}
+s+=T(SX+16,SY+222,'✓ OK','font-size="18" fill="var(--acc)"').replace('fill="var(--line)" ','');
+s+=`</g>`;
+s+=callout(SX+150,SY+2,4);
+g.innerHTML=s;
+}
+</script>
+</body>
+</html>
