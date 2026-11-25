@@ -45,6 +45,20 @@ p{margin:.6em 0}
 .zone{background:var(--zone)}
 nav{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule)}
 nav .wrap{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:center;padding:12px max(5vw,16px)}
+.send{display:grid;gap:18px}
+.pick{display:flex;flex-wrap:wrap;gap:8px}
+.pick button{min-height:44px;padding:0 16px;border-radius:6px;border:1.5px solid var(--line);background:var(--card);color:var(--line);font:600 16px Barlow,sans-serif;cursor:pointer}
+.pick button[aria-selected=true]{background:var(--line);color:var(--bg)}
+.pick button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.kinds{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.kind{display:flex;flex-direction:column;gap:8px;background:var(--card);border:1px solid var(--rule);border-radius:6px;padding:18px 18px 16px}
+.kind h3{font-size:21px}
+.kind p{margin:0;color:var(--mut);font-size:15px;flex:1}
+.kind .btn{align-self:flex-start;margin-top:6px}
+.kind.main{border:1.5px solid var(--acc)}
+.kind small{font-size:13px;color:var(--mut);overflow-wrap:anywhere}
+@media(max-width:900px){.kinds{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.kinds{grid-template-columns:minmax(0,1fr)}}
 nav b{font:600 20px "Barlow Semi Condensed",sans-serif;margin-right:auto}
 .lang{display:inline-flex;border:1.5px solid var(--line);border-radius:6px;overflow:hidden;flex:none}
 .lang a{display:inline-flex;align-items:center;min-height:34px;padding:0 11px;font:600 14px/1 Barlow,sans-serif;color:var(--line);text-decoration:none}
@@ -124,7 +138,7 @@ footer a{color:var(--ink)}
 </style>
 </head>
 <body>
-<nav><div class="wrap"><div class="brand"><span class="lang" role="group" aria-label="Language / Idioma"><a href="../" lang="es" hreflang="es" title="Español">ES</a><a href="./" aria-current="page" lang="en" title="English">EN</a></span><b>Open structural engineering</b></div><a href="#programs">Programs</a><a href="#guide">Download and install</a><a href="#get-involved">Get involved</a><a href="https://github.com/marcel1983">GitHub</a></div></nav>
+<nav><div class="wrap"><div class="brand"><span class="lang" role="group" aria-label="Language / Idioma"><a href="../" lang="es" hreflang="es" title="Español">ES</a><a href="./" aria-current="page" lang="en" title="English">EN</a></span><b>Open structural engineering</b></div><a href="#programs">Programs</a><a href="#guide">Download and install</a><a href="#send">Send</a><a href="#get-involved">Get involved</a><a href="https://github.com/marcel1983">GitHub</a></div></nav>
 
 <header class="band">
 <div class="wrap">
@@ -134,7 +148,7 @@ footer a{color:var(--ink)}
 </div>
 <div>
 <p class="lead">Made by engineers, free of charge and open source. Download them, use them on your projects and help us improve them: by reporting problems, contributing worked examples or writing code.</p>
-<div class="btns" style="margin-top:16px"><a class="btn solid" href="#programs">See the programs</a><a class="btn" href="#get-involved">How to get involved</a></div>
+<div class="btns" style="margin-top:16px"><a class="btn solid" href="#programs">See the programs</a><a class="btn" href="#send">Send a report or contribution</a></div>
 </div>
 </div>
 
@@ -166,6 +180,35 @@ footer a{color:var(--ink)}
 <div class="apps" id="apps"></div>
 </div>
 </section>
+
+<section class="band" id="send">
+<div class="wrap">
+<div class="sec-head"><h2>Send a report or a contribution</h2><p>Pick the program and what you want to send. Each button opens that project's form on GitHub, ready to fill in; you only need a free GitHub account (GitHub asks you to sign in if you haven't).</p></div>
+<div class="send">
+<div class="pick" role="tablist" aria-label="Program"><button type="button" role="tab" id="pick-openconex" data-app="openconex" aria-selected="false">OpenConex</button><button type="button" role="tab" id="pick-openfemconex" data-app="openfemconex" aria-selected="false">OpenFEMConex</button><button type="button" role="tab" id="pick-opensees-studio" data-app="opensees-studio" aria-selected="false">OpenSees Studio</button><button type="button" role="tab" id="pick-ingecalc" data-app="ingecalc" aria-selected="false">IngeCalc</button></div>
+<div class="kinds" id="kinds" role="tabpanel"></div>
+<p class="note">If it is your first time, read the <a href="#guide">guide</a> first: it explains what to put in each field and how to attach the model file.</p>
+</div>
+</div>
+</section>
+<script>
+{
+const GH='https://github.com/marcel1983/';
+const names={'openconex':'OpenConex','openfemconex':'OpenFEMConex','opensees-studio':'OpenSees Studio','ingecalc':'IngeCalc'};
+const kinds=[{k:'validation',main:true,t:'Validation case',d:'An example with a known answer: design guide, textbook, hand calculation or another program. It becomes an automated test.',type:'issue',tpl:'validation_case.yml'},{k:'calc',main:false,t:'Calculation error',d:'A number, a unit or a code check that does not match what you expect.',type:'issue',tpl:'calculation_error.yml'},{k:'bug',main:false,t:'Bug in the program',d:'It crashes, shows an error, won\'t install or doesn\'t do what it should.',type:'issue',tpl:'bug_report.yml'},{k:'feature',main:false,t:'Feature request',d:'A new feature, connection type, analysis or design code.',type:'issue',tpl:'feature_request.yml'},{k:'question',main:false,t:'Question or idea',d:'How-to questions or ideas not yet shaped. They go to Discussions.',type:'q',tpl:''},{k:'code',main:false,t:'Contribute code',d:'Fork the repository, work on a branch and open a pull request. Read CONTRIBUTING first.',type:'code',tpl:''}];
+const btn={issue:'Open the form',q:'Ask',code:'Fork'};
+const box=document.getElementById('kinds');
+const picks=[...document.querySelectorAll('.pick button')];
+const url=(app,k)=>k.type==='issue'?`${GH}${app}/issues/new?template=${k.tpl}`:k.type==='q'?`${GH}${app}/discussions/new?category=q-a`:`${GH}${app}/fork`;
+const show=app=>{
+for(const p of picks)p.setAttribute('aria-selected',p.dataset.app===app?'true':'false');
+box.innerHTML=kinds.map(k=>`<div class="kind${k.main?' main':''}"><h3>${k.t}</h3><p>${k.d}</p><a class="btn${k.main?' solid':''}" href="${url(app,k)}">${btn[k.type]} · ${names[app]}</a>${k.type==='code'?`<small><a href="${GH}${app}/blob/main/CONTRIBUTING.md">Read CONTRIBUTING</a></small>`:''}</div>`).join('');
+};
+for(const p of picks)p.addEventListener('click',()=>show(p.dataset.app));
+const fromHash=()=>{const m=location.hash.match(/^#send-(.+)$/);if(m&&names[m[1]]){show(m[1]);document.getElementById('send').scrollIntoView();}};
+show('openconex');fromHash();addEventListener('hashchange',fromHash);
+}
+</script>
 
 <section class="band" id="guide">
 <div class="wrap">
@@ -220,7 +263,7 @@ footer a{color:var(--ink)}
 
 <li class="step"><span class="n"></span>
 <div><h3>Report a problem or propose an improvement</h3>
-<p>Open the program's <b>Issues</b> tab and click <b>New issue</b> (or use the <b>Report or propose</b> button on each card). Pick the template that fits and fill in the form; each field says what to write.</p>
+<p>Open the program's <b>Issues</b> tab and click <b>New issue</b> (or, easier, use the <a href="#send">Send a report or a contribution</a> section, which opens the right form). Pick the template that fits and fill in the form; each field says what to write.</p>
 <ul>
 <li>Give the <b>version</b> (it is in the name of the file you downloaded, or in Help › About).</li>
 <li><b>Drag</b> screenshots and the model file into the form. If GitHub refuses the extension (<code>.ocnx</code>, <code>.osmodel</code>, <code>.smj</code>), zip it first.</li>
@@ -313,7 +356,7 @@ document.getElementById('apps').innerHTML=apps.map(a=>`
 <ul>${a.pts.map(p=>`<li>${p}</li>`).join('')}</ul>
 ${a.extra?`<p style="margin:0;font-size:15px;color:var(--mut)">${a.extra}</p>`:''}
 <div class="meta">For ${a.os}. Built with ${a.tech}.</div>
-<div class="btns"><a class="btn solid" href="${GH}${a.id}/releases/latest">Download</a><a class="btn" href="${GH}${a.id}/issues/new/choose">Report or propose</a><a class="btn" href="${GH}${a.id}">Code</a></div>
+<div class="btns"><a class="btn solid" href="${GH}${a.id}/releases/latest">Download</a><a class="btn" href="#send-${a.id}">Report or contribute</a><a class="btn" href="${GH}${a.id}">Code</a></div>
 </div>
 </article>`).join('');
 
@@ -387,11 +430,11 @@ g.innerHTML=s;
 </script>
 <script>
 {
-const map={programas:'programs',guia:'guide',participar:'get-involved'};
+const map={programas:'programs',guia:'guide',participar:'get-involved',enviar:'send'};
 const back=Object.fromEntries(Object.entries(map).map(([a,b])=>[b,a]));
 const links=[...document.querySelectorAll('.lang a:not([aria-current])')];
 for(const a of links)a.dataset.base=a.getAttribute('href');
-const sync=()=>{const h=location.hash.slice(1);const t=h?(map[h]||back[h]||h):'';for(const a of links)a.setAttribute('href',a.dataset.base+(t?'#'+t:''));};
+const sync=()=>{const h=location.hash.slice(1);const m=h.match(/^(enviar|send)-(.+)$/);const t=m?((map[m[1]]||back[m[1]])+'-'+m[2]):(h?(map[h]||back[h]||h):'');for(const a of links)a.setAttribute('href',a.dataset.base+(t?'#'+t:''));};
 sync();addEventListener('hashchange',sync);
 }
 </script>
